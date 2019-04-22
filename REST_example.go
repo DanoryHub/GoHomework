@@ -36,16 +36,16 @@ func GetBook(writer http.ResponseWriter, request *http.Request){
 			return
 		}
 	}
-	json.NewEncoder(writer)
+	json.NewEncoder(writer).Encode(&Book{})
 }
 
-func CreateBook(writer http.ResponseWriter, request *http.Request){
-	writer.Header().Set("Content-Type","application/json")
+func CreateBook(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	var book Book
-	_ = json.NewDecoder(request.Body).Decode(&book)
+	_ = json.NewDecoder(r.Body).Decode(&book)
 	book.ID = strconv.Itoa(rand.Intn(1000000))
 	books = append(books, book)
-	json.NewEncoder(writer).Encode(book)
+	_ = json.NewEncoder(w).Encode(book)
 }
 
 func UpdateBook(writer http.ResponseWriter, request *http.Request){
