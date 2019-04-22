@@ -1,12 +1,12 @@
 package main
 
-import(
-	"log"
-	"net/http"
-	"math/rand"
-	"strconv"
+import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"log"
+	"math/rand"
+	"net/http"
+	"strconv"
 )
 
 type Book struct {
@@ -24,7 +24,7 @@ var books []Book
 
 func GetBooks(writer http.ResponseWriter, request *http.Request){
 	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(books)
+	_ = json.NewEncoder(writer).Encode(books)
 }
 
 func GetBook(writer http.ResponseWriter, request *http.Request){
@@ -32,11 +32,11 @@ func GetBook(writer http.ResponseWriter, request *http.Request){
 	params := mux.Vars(request)
 	for _, item := range books{
 		if item.ID == params["id"]{
-			json.NewEncoder(writer).Encode(item)
+			_ = json.NewEncoder(writer).Encode(item)
 			return
 		}
 	}
-	json.NewEncoder(writer).Encode(&Book{})
+	_ = json.NewEncoder(writer).Encode(&Book{})
 }
 
 func CreateBook(w http.ResponseWriter, r *http.Request) {
@@ -58,11 +58,11 @@ func UpdateBook(writer http.ResponseWriter, request *http.Request){
 			_ = json.NewDecoder(request.Body).Decode(&book)
 			book.ID = params["id"]
 			books = append(books, book)
-			json.NewEncoder(writer).Encode(book)
+			_ = json.NewEncoder(writer).Encode(book)
 			return
 		}
 	}
-	json.NewEncoder(writer).Encode(books)
+	_ = json.NewEncoder(writer).Encode(books)
 }
 
 func DeleteBook(writer http.ResponseWriter, request *http.Request) {
@@ -73,7 +73,7 @@ func DeleteBook(writer http.ResponseWriter, request *http.Request) {
 			books = append(books[:index], books[index+1:]...)
 			break
 		}
-		json.NewEncoder(writer).Encode(books)
+		_ = json.NewEncoder(writer).Encode(books)
 	}
 }
 
