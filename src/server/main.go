@@ -88,6 +88,15 @@ func deleteUserAccount(writer http.ResponseWriter, request *http.Request){
 	}
 }
 
+func deleteAccountTransaction(writer http.ResponseWriter, request *http.Request){
+	writer.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(request)
+	err := storage.DeleteTransaction(params["user_id"], params["account_id"], params["transaction_id"])
+	if err != nil{
+		log.Fatal(err.Error())
+	}
+}
+
 func createUser(writer http.ResponseWriter, request *http.Request){
 	writer.Header().Set("Content-Type", "application/json")
 	var user repository.User
@@ -110,6 +119,18 @@ func createUserAccount(writer http.ResponseWriter, request *http.Request){
 	}
 	_ = json.NewEncoder(writer).Encode(account)
 
+}
+
+func createAccountTransaction(writer http.ResponseWriter, request *http.Request){
+	writer.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(request)
+	var transaction repository.Transaction
+	_ = json.NewDecoder(request.Body).Decode(&transaction)
+	transaction, err := storage.CreateTransaction(params["user_id"], params["account_id"], transaction)
+	if err != nil{
+		log.Fatal(err.Error())
+	}
+	_ = json.NewEncoder(writer).Encode(transaction)
 }
 
 func updateUser(writer http.ResponseWriter, request *http.Request){
@@ -136,11 +157,23 @@ func updateUserAccount(writer http.ResponseWriter, request *http.Request){
 	_ = json.NewEncoder(writer).Encode(account)
 }
 
+func updateAccountTransaction(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(request)
+	var transaction repository.Transaction
+	_ = json.NewDecoder(request.Body).Decode(&transaction)
+	transaction, err := storage.UpdateTransaction(params["user_id"], params["account_id"], params["transaction_id"], transaction)
+	if err != nil{
+		log.Fatal(err.Error())
+	}
+	_ = json.NewEncoder(writer).Encode(transaction)
+}
+
 func main(){
 	router := mux.NewRouter()
 	UsersRouter := router.PathPrefix("/users").Subrouter()
 	AccountsRouter := router.PathPrefix("/users/{user_id}/accounts").Subrouter()
-	TransactionsRouter := router.PathPrefix("/users/{user_id}/accounts/{account_id}/transactions")
+	TransactionsRouter := router.PathPrefix("/users/{user_id}/accounts/{account_id}/transactions").Subrouter()
 	UsersRouter.HandleFunc("/", getUsers).Methods("GET")
 	UsersRouter.HandleFunc("/", createUser).Methods("POST")
 	UsersRouter.HandleFunc("/{user_id}", getUser).Methods("GET")
@@ -151,5 +184,10 @@ func main(){
 	AccountsRouter.HandleFunc("/{account_id}", getUserAccount).Methods("GET")
 	AccountsRouter.HandleFunc("/{account_id}", deleteUserAccount).Methods("DELETE")
 	AccountsRouter.HandleFunc("/{account_id}", updateUserAccount).Methods("PUT")
+	TransactionsRouter.HandleFunc("/", getAccountTransactions).Methods("GET")
+	TransactionsRouter.HandleFunc("/", createAccountTransaction).Methods("POST")
+	TransactionsRouter.HandleFunc("/{transaction_id}", getAccountTransaction).Methods("GET")
+	TransactionsRouter.HandleFunc("/{transaction_id}", deleteAccountTransaction).Methods("DELETE")
+	TransactionsRouter.HandleFunc("/{transaction_id}", updateAccountTransaction).Methods("PUT")
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
