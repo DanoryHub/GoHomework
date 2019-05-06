@@ -100,8 +100,8 @@ func (p *PSQLStub)UpdateTransaction(userID string, accountID string, transaction
 		if user.ID == userID{
 			for acc_index, account := range user.Accounts{
 				if account.ID == accountID{
-					for transaction_index, transaction := range account.Transactions{
-						if transaction.ID == transactionID{
+					for transaction_index, transact := range account.Transactions{
+						if transact.ID == transactionID{
 							p.Users[usr_index].Accounts[acc_index].Transactions = append(p.Users[usr_index].Accounts[acc_index].Transactions[:transaction_index],
 								p.Users[usr_index].Accounts[acc_index].Transactions[transaction_index+1:]...)
 							p.Users[usr_index].Accounts[acc_index].Transactions = append(p.Users[usr_index].Accounts[acc_index].Transactions, transaction)

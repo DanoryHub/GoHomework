@@ -24,7 +24,7 @@ type (
 		Firstname string `json:"firstname"`
 		Lastname string `json:"lastname"`
 		Email string `json:"email"`
-		SMS string `json:"sms"`
+		Phone string `json:"phone"`
 		Accounts []Account `json:"accounts"`
 	}
 
