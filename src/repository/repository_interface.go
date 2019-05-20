@@ -20,25 +20,26 @@ type (
 	}
 
 	User struct {
-		ID string `json:"id"`
-		Firstname string `json:"firstname"`
-		Lastname string `json:"lastname"`
-		Email string `json:"email"`
-		Phone string `json:"phone"`
-		Accounts []Account `json:"accounts"`
+		ID        string    `json:"id"`
+		Firstname string    `json:"firstname"`
+		Lastname  string    `json:"lastname"`
+		Email     string    `json:"email"`
+		Phone     string    `json:"phone"`
+		Accounts  []Account `json:"accounts"`
 	}
 
-	Account struct{
-		ID string `json:"id"`
-		UserID string `json:"user_id"`
-		Balance string `json:"balance"`
-		Currency string `json:"currency"`
+	Account struct {
+		ID           string        `json:"id"`
+		UserID       string        `json:"user_id"`
+		Balance      string        `json:"balance"`
+		Currency     string        `json:"currency"`
 		Transactions []Transaction `json:"transactions"`
 	}
 
-	Transaction struct{
-		ID string `json:"id"`
+	Transaction struct {
+		ID        string `json:"id"`
 		AccountID string `json:"account_id"`
 		Operation string `json:"operation"`
+		Date      string `json:"date"`
 	}
 )
