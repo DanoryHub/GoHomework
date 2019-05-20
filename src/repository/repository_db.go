@@ -11,7 +11,7 @@ type DBRepo struct {
 }
 
 func DBInit(DBUserName, DBPassword string) *sql.DB {
-	db, err := sql.Open("postgres", "user="+DBUserName+" password="+DBPassword+" dbname=gobankdb sslmode=disable")
+	db, err := sql.Open("postgres", "user="+DBUserName+" password="+DBPassword+" sslmode=disable")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
